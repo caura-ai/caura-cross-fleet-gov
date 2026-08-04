@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Validate OpenClaw JSON
+        run: jq empty .openclaw/openclaw.json
+
+      - name: Lint shell setup
+        run: |
+          if ! command -v shellcheck >/dev/null 2>&1; then
+            sudo apt-get update
+            sudo apt-get install --yes shellcheck
+          fi
+          shellcheck setup.sh
+
+      - name: Install PSScriptAnalyzer
+        shell: pwsh
+        run: Install-Module PSScriptAnalyzer -RequiredVersion 1.25.0 -Force -Scope CurrentUser -SkipPublisherCheck
+
+      - name: Lint PowerShell setup
+        shell: pwsh
+        run: |
+          $results = @(Invoke-ScriptAnalyzer -Path setup.ps1 -Settings PSScriptAnalyzerSettings.psd1)
+          $results | Format-Table -AutoSize
+          if ($results.Count -gt 0) {
+            throw "PSScriptAnalyzer found $($results.Count) issue(s)."
+          }

@@ -70,7 +70,9 @@ while ($attempts -lt 20 -and -not $ready) {
     try {
         $resp = Invoke-WebRequest -Uri "http://localhost:8000/api/v1/health" -UseBasicParsing -TimeoutSec 2
         if ($resp.StatusCode -eq 200) { $ready = $true }
-    } catch {}
+    } catch {
+        Write-Verbose "MemClaw health check failed: $($_.Exception.Message)"
+    }
     Write-Host "." -NoNewline
 }
 Write-Host ""

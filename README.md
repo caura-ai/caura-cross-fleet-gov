@@ -12,6 +12,7 @@
 
 <p align="center">
   <a href="https://memclaw.net/docs"><img src="https://img.shields.io/badge/docs-memclaw.net-2A9D8F?style=flat-square" /></a>
+  <a href="https://github.com/caura-ai/memclaw-cross-fleet-gov/actions/workflows/ci.yml"><img src="https://github.com/caura-ai/memclaw-cross-fleet-gov/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
   <a href="https://github.com/caura-ai/caura-memclaw"><img src="https://img.shields.io/badge/Memory-MemClaw-2A9D8F?style=flat-square" /></a>
   <img src="https://img.shields.io/badge/Orchestration-OpenClaw-3A86FF?style=flat-square" />
   <img src="https://img.shields.io/badge/Isolation-Fleet--Scoped-E76F51?style=flat-square" />
