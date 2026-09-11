@@ -160,6 +160,9 @@ foreach ($f in $fleets) {
                 Invoke-RestMethod $url -OutFile $tempScript
                 Write-Host "  Saved plugin installer to $tempScript for inspection"
                 & $bash $tempScript
+                if ($LASTEXITCODE -ne 0) {
+                    throw "Plugin installer exited with code $LASTEXITCODE for $($f.fleet)."
+                }
                 Write-OK "Plugin installed for $($f.fleet)"
             } finally {
                 if (Test-Path $tempScript) {
