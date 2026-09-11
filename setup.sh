@@ -141,7 +141,7 @@ step "Installing MemClaw plugin"
 
 for fleet in "${FLEETS[@]}"; do
     url="$MEMCLAW_URL/api/v1/install-plugin?fleet_id=$fleet&api_url=$MEMCLAW_URL"
-    tmp_script="$(mktemp /tmp/memclaw-plugin-${fleet}-XXXXXX.sh 2>/dev/null || mktemp -t memclaw-plugin-${fleet}-XXXXXX.sh)"
+    tmp_script="$(mktemp /tmp/memclaw-plugin-${fleet}-XXXXXX 2>/dev/null || mktemp -t memclaw-plugin-${fleet}-XXXXXX)"
     if curl -sf "$url" -o "$tmp_script"; then
         echo "  Saved plugin installer to $tmp_script for inspection"
         if bash "$tmp_script"; then
@@ -149,10 +149,10 @@ for fleet in "${FLEETS[@]}"; do
         else
             warn "Plugin install for $fleet failed or already installed"
         fi
-        rm -f "$tmp_script"
     else
         warn "Plugin download for $fleet failed"
     fi
+    rm -f "$tmp_script"
 done
 
 # ── 8. Start gateway ──────────────────────────────────────────────────────────
