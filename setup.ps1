@@ -151,12 +151,15 @@ $fleets = @(
 foreach ($f in $fleets) {
     try {
         $url = "http://localhost:8000/api/v1/install-plugin?fleet_id=$($f.fleet)&api_url=http://localhost:8000"
-        $script = Invoke-RestMethod $url
         $bash = (Get-Command bash -ErrorAction SilentlyContinue).Source
         if (-not $bash) {
             Write-Warn "bash not found — skipping plugin install for $($f.fleet). Install WSL or Git Bash, then re-run setup."
         } else {
-            $script | & $bash
+            $tempScript = [System.IO.Path]::Combine([System.IO.Path]::GetTempPath(), "memclaw-plugin-$($f.fleet)-$([System.Guid]::NewGuid().ToString('N')).sh")
+            Invoke-RestMethod $url -OutFile $tempScript
+            Write-Host "  Saved plugin installer to $tempScript for inspection"
+            & $bash $tempScript
+            Remove-Item $tempScript -Force -ErrorAction SilentlyContinue
             Write-OK "Plugin installed for $($f.fleet)"
         }
     } catch {
