@@ -1,4 +1,4 @@
-﻿# setup.ps1 - First-time setup for memclaw-cross-fleet-gov (Windows)
+# setup.ps1 - First-time setup for memclaw-cross-fleet-gov (Windows)
 # Run once from the repo root in an elevated PowerShell session (Run as Administrator).
 # After this script completes, day-to-day use is just: openclaw gateway restart
 
@@ -151,13 +151,24 @@ $fleets = @(
 foreach ($f in $fleets) {
     try {
         $url = "http://localhost:8000/api/v1/install-plugin?fleet_id=$($f.fleet)&api_url=http://localhost:8000"
-        $script = Invoke-RestMethod $url
         $bash = (Get-Command bash -ErrorAction SilentlyContinue).Source
         if (-not $bash) {
             Write-Warn "bash not found — skipping plugin install for $($f.fleet). Install WSL or Git Bash, then re-run setup."
         } else {
-            $script | & $bash
-            Write-OK "Plugin installed for $($f.fleet)"
+            $tempScript = [System.IO.Path]::Combine([System.IO.Path]::GetTempPath(), "memclaw-plugin-$($f.fleet)-$([System.Guid]::NewGuid().ToString('N')).sh")
+            try {
+                Invoke-RestMethod $url -OutFile $tempScript
+                Write-Host "  Saved plugin installer to $tempScript for inspection"
+                & $bash $tempScript
+                if ($LASTEXITCODE -ne 0) {
+                    throw "Plugin installer exited with code $LASTEXITCODE for $($f.fleet)."
+                }
+                Write-OK "Plugin installed for $($f.fleet)"
+            } finally {
+                if (Test-Path $tempScript) {
+                    Remove-Item $tempScript -Force -ErrorAction SilentlyContinue
+                }
+            }
         }
     } catch {
         Write-Warn "Plugin install for $($f.fleet) failed or already installed: $_"
