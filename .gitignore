@@ -2,8 +2,6 @@
 .env
 
 # OpenClaw plugin — fetched at install time, not vendored
-.openclaw/plugins/**/node_modules/
-.openclaw/plugins/**/dist/
 .openclaw/plugins/memclaw/src/
 .openclaw/plugins/memclaw/skills/
 .openclaw/plugins/memclaw/tools.json
@@ -15,8 +13,6 @@
 .openclaw/plugins/memclaw/install.json
 .openclaw/plugins/memclaw/.allowlist-applied
 .openclaw/plugins/memclaw/.educated
-
-# OpenClaw runtime — never commit these
 .openclaw/agents/
 .openclaw/canvas/
 .openclaw/flows/
@@ -25,16 +21,12 @@
 .openclaw/memory/
 .openclaw/tasks/
 .openclaw/plugin-skills/
-.openclaw/openclaw.json.bak
-.openclaw/openclaw.json.last-good
+.openclaw/openclaw.json.ba
 .openclaw/openclaw.json.last-good
 .openclaw/gateway.cmd
 .openclaw/update-check.json
 .openclaw/workspace-state.json
 .openclaw/plugins/**/.env
-.openclaw/plugins/**/node_modules/
-
-# OpenClaw workspace runtime state
 agents/**/.openclaw/
 workspace-*/
 workspace/
