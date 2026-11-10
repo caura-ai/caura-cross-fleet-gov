@@ -52,13 +52,8 @@ if (-not (Test-Path "$memclawDir\.env")) {
     Write-Warn "MemClaw .env created at $memclawDir\.env - review it before first use"
 }
 
-$runningServices = docker compose -f "$memclawDir\docker-compose.yml" ps --services --filter "status=running" 2>$null
-if ($runningServices) {
-    Write-OK "MemClaw already running"
-} else {
-    docker compose -f "$memclawDir\docker-compose.yml" up -d
-    Write-OK "MemClaw started"
-}
+docker compose -f "$memclawDir\docker-compose.yml" up -d
+Write-OK "MemClaw started (idempotent - already-running services are left alone)"
 
 # Wait for MemClaw to be ready
 Write-Host "   Waiting for MemClaw to be ready..." -NoNewline

@@ -50,20 +50,16 @@ step "Starting MemClaw (docker compose)"
 
 MEMCLAW_DIR="$HOME/caura-memclaw"
 
-if docker compose -f "$MEMCLAW_DIR/docker-compose.yml" ps --services --filter "status=running" 2>/dev/null | grep -q .; then
-    ok "MemClaw already running"
-else
-    if [ ! -d "$MEMCLAW_DIR" ]; then
-        echo "   Cloning caura-memclaw..."
-        git clone https://github.com/caura-ai/caura-memclaw "$MEMCLAW_DIR"
-    fi
-    if [ ! -f "$MEMCLAW_DIR/.env" ]; then
-        cp "$MEMCLAW_DIR/.env.example" "$MEMCLAW_DIR/.env"
-        warn "MemClaw .env created at $MEMCLAW_DIR/.env - review it before first use"
-    fi
-    docker compose -f "$MEMCLAW_DIR/docker-compose.yml" up -d
-    ok "MemClaw started"
+if [ ! -d "$MEMCLAW_DIR" ]; then
+    echo "   Cloning caura-memclaw..."
+    git clone https://github.com/caura-ai/caura-memclaw "$MEMCLAW_DIR"
 fi
+if [ ! -f "$MEMCLAW_DIR/.env" ]; then
+    cp "$MEMCLAW_DIR/.env.example" "$MEMCLAW_DIR/.env"
+    warn "MemClaw .env created at $MEMCLAW_DIR/.env - review it before first use"
+fi
+docker compose -f "$MEMCLAW_DIR/docker-compose.yml" up -d
+ok "MemClaw started (idempotent — already-running services are left alone)"
 
 echo -n "   Waiting for MemClaw to be ready"
 attempts=0
