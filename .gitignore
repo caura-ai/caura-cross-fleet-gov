@@ -4,11 +4,12 @@
 # OpenClaw plugin — fetched at install time, not vendored
 .openclaw/plugins/**/node_modules/
 .openclaw/plugins/**/dist/
-.openclaw/plugins/memclaw/src/
-.openclaw/plugins/memclaw/skills/
-.openclaw/plugins/memclaw/tools.json
-.openclaw/plugins/memclaw/package.json
-.openclaw/plugins/memclaw/tsconfig.json
+.openclaw/plugins/**/src/
+.openclaw/plugins/**/skills/
+.openclaw/plugins/**/tools.json
+.openclaw/plugins/**/package.json
+.openclaw/plugins/**/tsconfig.json
+.openclaw/plugins/**/.env
 
 # OpenClaw plugin runtime state
 .openclaw/plugins/installs.json
@@ -27,12 +28,9 @@
 .openclaw/plugin-skills/
 .openclaw/openclaw.json.bak
 .openclaw/openclaw.json.last-good
-.openclaw/openclaw.json.last-good
 .openclaw/gateway.cmd
 .openclaw/update-check.json
 .openclaw/workspace-state.json
-.openclaw/plugins/**/.env
-.openclaw/plugins/**/node_modules/
 
 # OpenClaw workspace runtime state
 agents/**/.openclaw/
@@ -68,4 +66,5 @@ Thumbs.db
 # Bare git clones / mirrors
 *.git/
 
+# detect-secrets baseline — machine-specific, not committed
 .secrets.baseline
